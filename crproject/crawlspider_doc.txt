@@ -1,0 +1,8 @@
+Today we crawl books to scrape page
+
+1. to see all available genspider commands
+scrapy genspider -l # l for list
+
+2. to create crawlspider
+scrapy genspider -t crawl books_crawl x # here -t for template and crawl for crawl spider if we dont declare crawl scrapy generate simple spider for us
+code .
