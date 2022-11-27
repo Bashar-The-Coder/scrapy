@@ -1,0 +1,241 @@
+first install git
+then config git to introduce yourself 
+
+1. # েটা দেওয়ার মানে হচ্ছে কে কি কাজ করেছে তা গিট হাব এ দেখা
+git config --global user.name "your user name"
+
+2. গিট কনফিগার ইমেইল
+git config --global user.email "yourname@email.com" 
+
+3. গিট ইউজার নামে দেখার জন্য
+git config --global user.name
+
+4. গিট ইমেইল দেখার জন্য. এটা  দেওয়ার কারন হচ্ছে গিট জেন বুঝতে পারে 
+git config --global user.email
+
+5. গিট ইনিশিয়াল করার জন্য বা যে ফোল্ডার টার দিকে নজর রাখবে তার জন্য
+git init
+
+6. গিট ফাইল এর অবস্থা দেখার জন্য . এটা বার বার করলে ভাল।
+git status
+
+এরকম একটা আসবে 
+        nothing added to commit but untracked files present (use "git add" to track)
+        PS F:\6GIT> git status
+        On branch master
+
+        No commits yet
+
+        Untracked files:
+        (use "git add <file>..." to include in what will be committed)
+                about.html
+                contact.html
+                git/
+                index.html
+
+no commits yet মানে save kora. untracked files মানে হচ্ছে যেঁগুলো file create kora hoyeche কিন্তু গিট এর নজর এ নাই সেগুলো। vs code এ ফাইল এর পাশে U lekha  মানে
+হচ্ছে ogulo Untracked.
+
+সাধারনত যখন কোন ফাইল create করা হয় সেগুলো untracked hoye থাকে। 
+untracked থেকে সেভ করলে file যাবে staged এ
+
+staged থেকে commit করলে টা যাবে Unmodified a.
+
+Unmodified থেকে ডিলিট বা রিমুভ করে দিলে আবার সেটা Untracked a ese পরবে।
+
+এর পর কোন কিছু edit করলে টা Modified এ চলে আসবে।
+
+Modified theke  abar stage  এ নিতে হবে তাহলে টা আবার Unmodified a chole আসবে
+
+7. কোন ফাইল stage a nite hole
+git add index.html
+
+        On branch master
+        No commits yet
+        Changes to be committed:
+        (use "git rm --cached <file>..." to unstage)
+                new file:   index.html
+
+        Untracked files:
+        (use "git add <file>..." to include in what will be committed)
+                about.html
+                contact.html
+                git/
+                media.html
+
+8. সকল ফাইল একত্রে stage এ তলার জন্য
+git add -A
+        On branch master
+        No commits yet
+        Changes to be committed:
+        (use "git rm --cached <file>..." to unstage)
+                new file:   about.html
+                new file:   contact.html
+                new file:   git/tutorial.txt
+                new file:   index.html
+                new file:   media.html
+
+9. stage theke abar sokol file Untracked অবস্থায় আসার জন্য. [vs code er file name এর পাশে স্ট্যাটাস দেখা যাবে]
+git reset
+
+10. স্টেজ থেকে specific file untracked a নিয়ে আসার জন্য
+git rm --cached filename.ext
+
+
+
+11. কোন directoryr specific file stage এ তলার জন্য
+git add css/custom.css
+git add git/tutorial.txt
+
+stage থেকে commit korle ta Unmodified এ চলে যায় । পরবরতিতে এসকল ফাইল github a upload kora jabe.
+
+12. পরবর্তী ধাপ হচ্ছে commit . 
+git commit 
+এটা দিলে একটা বিম এডিটর আসবে। ekhane i chapte hobe তারপর কমেন্ট লিখতে হবে এরপর enter press তারপর esc চাপতে হবে
+এরপর ঃ চেপে wq likhe  এন্টার দিলে দেখা যাবে সকল ফাইল commit হয়ে গেছে
+
+13. commit করার পর যদি কোন ফাইল এ কোন কিছু change kora hoy তাহলে টা Modified flag show korbe বা গিট স্ট্যাটাস এ টা দেখাবে। তারপর তা আবার স্টেজ এ তুলতে হবে
+git add modifiedFile বা
+git add -A অথবা 
+git add .
+
+
+14. shortcut way to commit
+git commit -m "আপনার বক্তব্য"
+
+now এটা একটা মজার পার্ট 
+
+ধরা যাক কেও আমাদের ফোল্ডার এ থাকা index.html এর সকল লেখা মুছে দিল, আমাদের contact.html and media.html file গুলো রিমুভ করে দিয়েছে। ত এখন কি করা যাবে?
+
+15. তাই কোন nirdishto ফাইল এর লেখা ফিরিয়ে আনার জন্য 
+git checkout index.html
+
+16. আর সকল deleted file lekha সহ ফিরিয়ে আনার জন্য
+git checkout -f
+
+মুলত সর্বশেষ commit er অবস্থায় নিয়ে যাবে এ command ti. তাই আমাদের সকল কাজ করম সেশ হওার পর অবসুই commit korte hobe.
+
+17. ফোল্ডার এ কি কি commit হয়েছে বা কখন commit hoyeche তা সবকিছু দেখার জন্নে
+git log
+
+18. last commit দেখার জন্য
+git log -p -1
+
+19. last ২ টা commit দেখার জন্য ja কিনা ভিম এডিটর
+git log -p -2
+
+** vim editor থেকে বের হওার জন্য q চাপতে হবে
+
+20. difference দেখার জন্য 
+git diff
+মুলত লাস্ট commit এর পর কি কি পরিবরতন হয়েছে টা দেখার জন্য এটা। eta লোকাল এর সাথে স্টেজ এর compare করে।
+
+21. git commit and staged এর compare করার জন্নে
+git diff --staged
+
+22. ধরা যাক আমরা আমাদের কাজ সেশ করে ফাইল স্টেজ এ নিলাম বা stage er purboborti কোন এডিট করলাম। এখন চাই সর্বশেষ commit er jaygay ফিরে যেতে তাহলে...
+git reset --hard
+
+23. কোন ফাইল create kore তা স্টেজ এ নিয়ে জাওার পর অই ফাইল ডিলিট করতে হলে।
+        git rm test.txt -f
+
+24. kono ফাইল বা ফোল্ডার এর ফাইল untracked rakhar jonne মানে যে ফাইল গুলো ট্র্যাক রাখার দরকার নাই তার জন্নে আমাদের .gitignore ফাইল create করতে হবে।
+        kono nirdishto ফাইল ignore korar jonne gitignore a likhte hobe
+        filename.ext like app.js
+
+        কোন ফোল্ডার ignore korar জন্য 
+        folderName/ ...like js/
+
+        কোন নির্দিষ্ট ফোল্ডার এ থাকা নির্দিষ্ট ফাইল ignore korar জন্য
+        pathname/filename ...like css/custom.css
+
+        নির্দিষ্ট কোন file extension ignore করার জন্য
+        *.png 
+        *.jpg
+
+25. git Branch procoder 42.14
+        a. create a branch-
+        git branch mini
+
+        b. immidiate create a branch and checkout
+        git checkout -b main
+
+        c. see branch list
+        git branch
+
+        d. switch to other branch
+        git checkout mini
+
+        e. branch ডিলিট করার জন্য
+        git branch -d branchName
+
+        f. merge করার জন্য
+
+ধরা যাক আমরা একটা ব্রাঞ্ছ তইরি করলাম mini নাম দিয়ে। তারপর উক্ত ব্রাঞ্ছ এ এসে কিছু ফাইল এডিট করলাম এবং stage to commit করলাম। এরপর মারজ করার জন্য আমরা প্রথমে 
+master ব্রাঞ্ছ এ আসব তারপর উক্ত ব্রাঞ্ছের সাথে মাস্তার ব্রাঞ্ছ merge korbo.
+
+git merge mini -m "comment for initial merge"
+
+
+26. github a কানেক্ট করার পদ্ধতি
+
+a. add a new repository with any name like git
+b. select ssh mode on that repository
+c. add remote link to your local repository like 
+        git remote add origin git@github.com:Bashar-The-Coder/git.git
+d. এখানে origin হচ্ছে লোকাল এর ব্রাঞ্ছ এর মত।
+e. origin এর link dekhar jonne
+        git remote -v
+
+push হচ্ছে যখন লোকাল থেকে ফাইল গিট এ পাঠানো 
+pull হচ্ছে github থেকে লোকাল a আনার কমান্ড
+
+পুশ করার জন্য
+git push , কোথায় পুশ করব? origin এ , origin এ আমরা আমাদের কোন ব্রাঞ্ছ পুশ করবো? master কে। ত ফুল্ কমান্ড হচ্ছে
+git push origin master
+
+এটা লেখার পর আমাদের একটা এররর দিবে এমন
+        Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+        Warning: Permanently added 'github.com,20.205.243.166' (ECDSA) to the list of known hosts.
+        git@github.com: Permission denied (publickey).
+        fatal: Could not read from remote repository.
+
+        Please make sure you have the correct access rights
+        and the repository exists.
+
+এর কারন হচ্ছে github er oi repository er permission dea nai . er jonno 
+
+click on github profile icon
+goto settings -> left panel এ ssh and GPG keys ->
+
+local এ কোন কি আছে কিনা তা চেক করার জন্য
+ls -al ~/.ssh
+
+SSH KEY যদি না থাকে তাহলে generate a new ssh key like this in local git
+ssh-keygen -t ed25519 -C "mat197194@gmail.com" এখানে এমাইল এর জায়গায় আপনার git a user email dite hobe. tarpor নাম দিতে হবে
+আমি দিলাম bashar. erpor enter enter enter. 
+এরপর directory te dekha jabe bashar এবং bashar.pub নামে ২তা ফাইল তইরি হয়েছে
+এরপর process id toiri korte hobe
+        eval "$(ssh-agent -s)"
+এটা লিখলে আমাদের একটা আইডি দিবে এমন
+        Agent pid 1912
+
+এরপর command লাইন এ likhte hobe
+         ssh-add ~/.ssh/id_ed25519
+         ekhane ~/ এর পরে আপনার প্রোজেক্ট এর পাথ বসবে
+         ssh-add ~/Desktop/bashar দিলাম
+eropor  আমরা ssh key generate korbo
+cat bashar.pub
+তাহলে আমরা একটা পাবলিক কী পাব। 
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILgBHNigw1H3gC5px4T4ok4wFG7K32zwRGtfVVbE+eUY mat197194@gmail.com
+তারপর তা কপি করে githuber generate ssh key te paste করতে হবে। একটা নাম দিলাম hmbr pc
+ব্যাস আমাদের লোকাল computer এখন cloud er sathe connected.  এখন আমরা আমাদের ফাইল github এ পুশ করতে পারব
+
+আমরা cloud er kon প্রোজেক্ট এ কাজ করছি বা কোন রেপসিতর‍্য te পুশ করব তা দেখার জন্য
+git remote -v
+
+সবকিছু ঠিক থাকলে আমরা এখন পুশ করবো
+git push -u origin master
+
+remove origin
+git remote remove origin
