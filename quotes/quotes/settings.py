@@ -1,4 +1,4 @@
-# Scrapy settings for bikebd project
+# Scrapy settings for quotes project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,17 +7,17 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'bikebd'
+BOT_NAME = 'quotes'
 
-SPIDER_MODULES = ['bikebd.spiders']
-NEWSPIDER_MODULE = 'bikebd.spiders'
-
+SPIDER_MODULES = ['quotes.spiders']
+NEWSPIDER_MODULE = 'quotes.spiders'
+FEED_EXPORT_ENCODING = 'utf-8'
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'bikebd (+http://www.yourdomain.com)'
+#USER_AGENT = 'quotes (+http://www.yourdomain.com)'
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = False
+ROBOTSTXT_OBEY = True
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -45,13 +45,13 @@ ROBOTSTXT_OBEY = False
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'bikebd.middlewares.BikebdSpiderMiddleware': 543,
+#    'quotes.middlewares.QuotesSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'bikebd.middlewares.BikebdDownloaderMiddleware': 543,
+#    'quotes.middlewares.QuotesDownloaderMiddleware': 543,
 #}
 
 # Enable or disable extensions
@@ -63,7 +63,7 @@ ROBOTSTXT_OBEY = False
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'bikebd.pipelines.BikebdPipeline': 300,
+#    'quotes.pipelines.QuotesPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)

@@ -1,0 +1,37 @@
+For the following HTML document:
+
+<html>
+  <body>
+    <a href="http://www.example.com">Example</a> 
+    <a href="http://www.stackoverflow.com">SO</a> 
+  </body>
+</html>
+The xpath query /html/body//a/@href (or simply //a/@href) will return:
+
+    http://www.example.com
+    http://www.stackoverflow.com
+To select a specific instance use /html/body//a[N]/@href,
+
+    $ /html/body//a[2]/@href
+    http://www.stackoverflow.com
+To test for strings contained in the attribute and return the attribute itself place the check on the tag not on the attribute:
+
+    $ /html/body//a[contains(@href,'example')]/@href
+    http://www.example.com
+Mixing the two:
+
+    $ /html/body//a[contains(@href,'com')][2]/@href
+    http://www.stackoverflow.com
+
+<!-- For get nth position -->
+<root>
+  <a>
+    <b>item</b>
+    <b>item1</b>
+    <b>item2</b>
+    <b>item3</b>
+    <b>item4</b>
+  </a>
+ </root>
+ 
+/root/a/b[position()=2]
