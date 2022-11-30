@@ -1,0 +1,212 @@
+
+"""
+Changing User Agents
+
+If you are scraping any popular website, they will have some level of blocking mechanism in place based on the user agents it sees you using.
+We can get around this by rotating through multiple user agents, that appear like real visitors to their site.
+Luckily for us, the Scrapy community have created some great extensions that make rotating through user agents very easy.
+In this case, we're going to use the scrapy-user-agents Scrapy download middleware.
+To use the scrapy-user-agents download middleware, simply install it:
+
+pip install scrapy-user-agents
+
+Then in add it to your projects settings.py file, and disable Scrapy's default UserAgentMiddleware by setting its value to None:"""
+# Then in add it to your projects settings.py file, and disable Scrapy's default UserAgentMiddleware by setting its value to None:
+
+<DOWNLOADER_MIDDLEWARES = {
+    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
+    'scrapy_user_agents.middlewares.RandomUserAgentMiddleware': 400,
+}>
+
+# The scrapy-user-agents download middleware contains about 2,200 common user agent strings, and rotates through them as your scraper makes requests.
+# Okay, managing your user agents will improve your scrapers reliability, however, we also need to manage the IP addresses we use when scraping.
+
+# *When a site sees to many requests coming from one IP Address/User Agent combination
+# *they usually limit/throttle the requests coming from that IP address. Most of the time this 
+# *is to prevent things such as DDOS attacks or just to limit the amout of traffic to their site 
+# *so that their servers don't run out of capacity.
+# *That is why we also will need to look at using proxies in combination with the random user
+# ?agents to provide a much more reliable way of bypassing the restrictions placed on our spiders.
+# ?While it's easy to scrape a few pages from a website using your local IP address and random User
+# ?Agents if you want to scrape thousands/millions of pages you will need a proxy.
+< ?Note: For those of you who don't know, your IP address is your computers unique identifier on the internet.>
+
+<p Rotating IP Addresses With Proxies
+To bypass this rate limiting/throttling the easiest 
+thing we can do is to change the IP address from which 
+we are sending our scraping requests - just like the randomising
+of the User Agents which we have already looked at. This is done
+using proxies.Proxies are a gateway through which you route your 
+scraping requests/traffic. As part of this routing process the IP address 
+is updated to be the IP address of the gateway through which your scraping 
+requests went through.Several companies provide this service of rotating proxies
+and their costs vary depending on their level of service and reliability.Proxy prices
+range from Free to thousands of dollars per month, and price often always isn't correlated to the performance.
+
+<!-- ! OPTIMUM SETTINGS FOR SCRAPY TO NOT HARM THE SERVER AND SCRAP SMOOTHLY -->
+<Don't Use Sleeps Between Requests
+If this was a scraper using the Python requests, a 
+lot of developers would simply use a time.sleep to add a delay between requests.
+However, when scraping with Scrapy you shouldn't use time.sleep as it will block
+the Twisted reactor (the underlying framework powering Scrapy), which will completely
+block your Scrapy spider and stop all of Scrapy's concurrency functionality.>
+
+<!-- !You should use one of the following methods... -->
+<Set Download Delays
+The easiest way to set Scrapy to delay or sleep between requests is to use its DOWNLOAD_DELAY functionality.
+By default, your Scrapy projects DOWNLOAD_DELAY setting is set to 0, which means that it sends each request 
+consecutively to the same website without any delay between requests.
+However, you can introduce delays between your requests by setting the DOWNLOAD_DELAY a non-zero seconds value:
+You can do this in your settings.py file like this:>
+
+## settings.py
+
+<DOWNLOAD_DELAY = 2  # 2 seconds of delay>
+
+Or in a specific spider using a custom_settings attribute (you need to use this method if running your spiders as a script with CrawlerProcess).
+
+# bookspider.py 
+
+<import scrapy
+from demo.items import BookItem
+
+class BookSpider(scrapy.Spider):
+    name = 'bookspider'
+    start_urls = ["http://books.toscrape.com"]
+
+    custom_settings = {
+        'DOWNLOAD_DELAY': 2 # 2 seconds of delay
+        }
+        
+    def parse(self, response):
+
+        for article in response.css('article.product_pod'):
+            book_item = BookItem(
+                url = article.css("h3 > a::attr(href)").get(),
+                title = article.css("h3 > a::attr(title)").extract_first(),
+                price = article.css(".price_color::text").extract_first(),
+            )
+            yield book_item
+>
+
+
+<Using this DOWNLOAD_DELAY setting, Scrapy will add a delay between each request when making requests to the same domain.
+Best Practice: If your scraping job isn't big and you don't have massive time pressure to complete a scrape, 
+then it is recommended to set a high DOWNLOAD_DELAY as this will minimize the load on the website and reduce your chances of getting blocked.
+
+Random Delays Between Requests
+By default, when you set DOWNLOAD_DELAY = 2 for example, Scrapy will introduce random delays of between:>
+
+<Upper Limit: 1.5 * DOWNLOAD_DELAY
+Lower Limit: 0.5 * DOWNLOAD_DELAY
+So for our example of DOWNLOAD_DELAY = 2, when a request it is made Scrapy will wait between 1-3 seconds before making the next request.
+
+This is because, by default, RANDOMIZE_DOWNLOAD_DELAY is set to `True in your Scrapy project.
+
+Fixed Delays Between Requests
+To introduced fixed delays, you simply need to RANDOMIZE_DOWNLOAD_DELAY equal to False in your settings.py file or spider like this.
+
+In settings.py file:>
+
+## settings.py
+
+<DOWNLOAD_DELAY = 2  # 2 seconds of delay
+RANDOMIZE_DOWNLOAD_DELAY = False # >
+
+
+In spider:
+
+# bookspider.py 
+
+<import scrapy
+from demo.items import BookItem
+
+class BookSpider(scrapy.Spider):
+    name = 'bookspider'
+    start_urls = ["http://books.toscrape.com"]
+
+    custom_settings = {
+        'DOWNLOAD_DELAY': 2, # 2 seconds of delay
+        'RANDOMIZE_DOWNLOAD_DELAY': False,
+        }
+        
+    def parse(self, response):
+        pass>
+
+
+<Using AutoThrottle Extension
+Another way to add delays between your requests when scraping a website is using Scrapy's AutoThrottle extension.
+AutoThrottle is a built-in Scrapy extension that continuously calculates the optimal delay between your requests 
+to minimise the load on the website you are crawling. It does this by adjusting the delay based on the latency of
+each response and if the response is valid or not.>
+
+This approach has a couple of advantages:
+
+<Adjusts To Website: Every website is different in terms of the amount of traffic their servers normally handle and 
+how aggressively they ban/throttle requests when a single IP is making requests too fast. With the AutoThrottle extension,
+you just set the initial parameters and it will calculate the optimal delay to use.
+Backoff When Errors: A key feature of the AutoThrottle extension is that it will slow down the requests if the server
+is returning errors (non-2XX status codes). Servers typically return error (non-200) responses faster than valid responses,
+so with a normal download delay and hard concurrency limit your scraper will start sending requests faster when it starts to 
+return errors. This the opposite of what a good scraper should do. So using the AutoThrottle extension fixes this problem.
+AutoThrottle Throttling Algorithm. The AutoThrottle algorithm throttles the download delays using the following rules:>
+
+Spiders start with a download delay of AUTOTHROTTLE_START_DELAY.
+When a response is received, the target download delay is calculated as latency / N where latency is
+ the latency of the response, and N is AUTOTHROTTLE_TARGET_CONCURRENCY.
+The download delay for next requests is set to the average of previous download delay and the target download delay.
+Responses that return a non-200 response don't decrease the download delay.
+The download delay can’t become less than DOWNLOAD_DELAY or greater than AUTOTHROTTLE_MAX_DELAY.
+Setting Up AutoThrottle
+To configure AutoThrottle extension, you first need to enable it in your settings.py file or the spider itself:
+
+In settings.py file:
+
+## settings.py
+
+DOWNLOAD_DELAY = 2  # minimum download delay 
+AUTOTHROTTLE_ENABLED = True
+
+
+In spider:
+
+# bookspider.py 
+
+import scrapy
+from demo.items import BookItem
+
+class BookSpider(scrapy.Spider):
+    name = 'bookspider'
+    start_urls = ["http://books.toscrape.com"]
+
+    custom_settings = {
+        'DOWNLOAD_DELAY': 2, # minimum download delay 
+        'AUTOTHROTTLE_ENABLED': True,
+        }
+        
+    def parse(self, response):
+        pass
+
+
+Then if you would like to customise the AutoThrottle extension you can use the following settings to configure it:
+
+AUTOTHROTTLE_START_DELAY
+AUTOTHROTTLE_MAX_DELAY
+AUTOTHROTTLE_TARGET_CONCURRENCY
+AUTOTHROTTLE_DEBUG
+AUTOTHROTTLE_START_DELAY
+The initial download delay in seconds. Default: 5.0 seconds.
+
+AUTOTHROTTLE_MAX_DELAY
+The maximum download delay in seconds the spider will us. It won't increase the download delay above this delay even when 
+experiencing high latencies. Default: 60.0 seconds.
+
+AUTOTHROTTLE_TARGET_CONCURRENCY
+The target number of active requests the spider should be sending to the website at any point in time. Default: 1 concurrent thread.
+The lower the AUTOTHROTTLE_TARGET_CONCURRENCY the politer your scraper.
+
+AUTOTHROTTLE_DEBUG
+When AUTOTHROTTLE_DEBUG is enabled, Scrapy will display stats about every response so you can monitor the download delays in real-time. Default: False.
+
+For more information about how to configure the AutoThrottle extension, then check out the official docs here.
+
