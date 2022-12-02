@@ -30,4 +30,3 @@ def start_requests(self):
 FEED_EXPORT_ENCODING = 'utf-8'
 
 #for xpath contains
-//*[contains(text(),'ABC')]

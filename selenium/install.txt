@@ -1,0 +1,3 @@
+pip install selenium
+download gecodriver and paste in same root folder and type in cmd
+setx path "%path%;D:/SCRAPY/selenium/geckodriver.exe  
