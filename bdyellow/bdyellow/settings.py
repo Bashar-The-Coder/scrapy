@@ -1,4 +1,4 @@
-# Scrapy settings for quotes project
+# Scrapy settings for bdyellow project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -7,14 +7,17 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = 'quotes'
+BOT_NAME = 'google-bot'
 
-SPIDER_MODULES = ['quotes.spiders']
-NEWSPIDER_MODULE = 'quotes.spiders'
-FEED_EXPORT_ENCODING = 'utf-8'
+SPIDER_MODULES = ['bdyellow.spiders']
+NEWSPIDER_MODULE = 'bdyellow.spiders'
+
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-#USER_AGENT = 'quotes (+http://www.yourdomain.com)'
+#USER_AGENT = 'bdyellow (+http://www.yourdomain.com)'
+## settings.py
+USER_AGENT = 'Mozilla/5.0 (iPad; CPU OS 12_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148'
+
 
 # Obey robots.txt rules
 ROBOTSTXT_OBEY = True
@@ -25,7 +28,7 @@ ROBOTSTXT_OBEY = True
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-# DOWNLOAD_DELAY = 3
+#DOWNLOAD_DELAY = 3
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
 #CONCURRENT_REQUESTS_PER_IP = 16
@@ -45,22 +48,14 @@ ROBOTSTXT_OBEY = True
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'quotes.middlewares.QuotesSpiderMiddleware': 543,
+#    'bdyellow.middlewares.BdyellowSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #DOWNLOADER_MIDDLEWARES = {
-#    'quotes.middlewares.QuotesDownloaderMiddleware': 543,
+#    'bdyellow.middlewares.BdyellowDownloaderMiddleware': 543,
 #}
-
-# important for this we need to install pip install scrapy_user_agents where we get almost 400 user agents
-DOWNLOADER_MIDDLEWARES = {
-    'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
-    'scrapy_user_agents.middlewares.RandomUserAgentMiddleware': 400,
-}
-
-DEFAULT_REQUEST_HEADERS = {'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.116 Safari/537.36'}
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -71,14 +66,12 @@ DEFAULT_REQUEST_HEADERS = {'user-agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x6
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 #ITEM_PIPELINES = {
-#    'quotes.pipelines.QuotesPipeline': 300,
+#    'bdyellow.pipelines.BdyellowPipeline': 300,
 #}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
-
-# this is important for request and response delay
-AUTOTHROTTLE_ENABLED = True
+#AUTOTHROTTLE_ENABLED = True
 # The initial download delay
 #AUTOTHROTTLE_START_DELAY = 5
 # The maximum download delay to be set in case of high latencies
@@ -91,7 +84,7 @@ AUTOTHROTTLE_ENABLED = True
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-# HTTPCACHE_ENABLED = True
+#HTTPCACHE_ENABLED = True
 #HTTPCACHE_EXPIRATION_SECS = 0
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
@@ -100,34 +93,3 @@ AUTOTHROTTLE_ENABLED = True
 # Set settings whose default value is deprecated to a future-proof value
 REQUEST_FINGERPRINTER_IMPLEMENTATION = '2.7'
 TWISTED_REACTOR = 'twisted.internet.asyncioreactor.AsyncioSelectorReactor'
-
-
-# for colorful log
-import copy
-from colorlog import ColoredFormatter
-import scrapy.utils.log
-
-color_formatter = ColoredFormatter(
-    (
-        '%(log_color)s%(levelname)-5s%(reset)s '
-        '%(yellow)s[%(asctime)s]%(reset)s'
-        '%(white)s %(name)s %(funcName)s %(bold_purple)s:%(lineno)d%(reset)s '
-        '%(log_color)s%(message)s%(reset)s'
-    ),
-    datefmt='%y-%m-%d %H:%M:%S',
-    log_colors={
-        'DEBUG': 'blue',
-        'INFO': 'bold_cyan',
-        'WARNING': 'red',
-        'ERROR': 'bg_bold_red',
-        'CRITICAL': 'red,bg_white',
-    }
-)
-
-_get_handler = copy.copy(scrapy.utils.log._get_handler)
-
-def _get_handler_custom(*args, **kwargs):
-    handler = _get_handler(*args, **kwargs)
-    handler.setFormatter(color_formatter)
-    return handler
-scrapy.utils.log._get_handler = _get_handler_custom
