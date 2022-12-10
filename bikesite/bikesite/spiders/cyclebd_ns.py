@@ -37,4 +37,5 @@ class CyclebdNsSpider(scrapy.Spider):
     def parseDetail(self, response):
         specs = response.xpath
 
-        for detail in response
+        for detail in response:
+            pass

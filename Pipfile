@@ -11,6 +11,9 @@ colorlog = "*"
 scrapy-user-agents = "*"
 selenium = "4"
 lxml = "*"
+pandas = "*"
+openpyxl = "*"
+scrapy-selenium = "*"
 
 [dev-packages]
 ipykernel = "*"
