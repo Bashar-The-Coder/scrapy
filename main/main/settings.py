@@ -11,6 +11,7 @@ BOT_NAME = 'main'
 
 SPIDER_MODULES = ['main.spiders']
 NEWSPIDER_MODULE = 'main.spiders'
+FEED_EXPORT_ENCODING = 'utf-8'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -62,9 +63,11 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
+ITEM_PIPELINES = {
 #    'main.pipelines.MainPipeline': 300,
-#}
+   'main.pipelines.PostgresPipeline': 300,
+   'main.pipelines.ExportToExcel': 300,
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html

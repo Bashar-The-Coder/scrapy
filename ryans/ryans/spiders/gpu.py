@@ -1,10 +1,14 @@
 import scrapy
-
+from .headers import headers
 
 class AaidSpider(scrapy.Spider):
     name = 'ryansgpu'
     allowed_domains = ['www.ryanscomputers.com']
     start_urls = ['https://www.ryanscomputers.com/category/gaming-desktop-component-graphics-card']
+    def start_requests(self):
+        for url in self.start_urls:
+            yield scrapy.Request(url = url, callback= self.parse, headers=headers)
+    
 
     def parse(self, response):
         item_card = response.xpath("//div[@class = 'cus-col-2 cus-col-3 cus-col-4 cus-col-5 category-single-product mb-2']")
@@ -34,12 +38,12 @@ class AaidSpider(scrapy.Spider):
                                                                     'price' : price,
                                                                     'ecommerce_discount': ecommerce_discount,
                                                                     'url' : product_url
-                                                                    } )
+                                                                    } , headers= headers)
         next_page = response.xpath("//a[@rel='next']/@href").get()
         abs_url = response.urljoin(next_page)
         print ("hello world", abs_url)
         if next_page:
-            yield response.follow (abs_url , callback = self.parse)
+            yield response.follow (abs_url , callback = self.parse, headers = headers)
 
     def parse_detail(self, response):
         prices = response.request.meta['price']
