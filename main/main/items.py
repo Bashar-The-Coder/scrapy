@@ -5,8 +5,6 @@
 import scrapy
 from w3lib.html import remove_tags, replace_escape_chars
 from itemloaders.processors import MapCompose, TakeFirst , Join
-
-
 # def rating(value):
 #     x = value.split(' ')[-1]
 #     return x
